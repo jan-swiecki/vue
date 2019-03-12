@@ -173,7 +173,9 @@ export function defineReactive (
     set: function reactiveSetter (newVal) {
       const value = getter ? getter.call(obj) : val
       /* eslint-disable no-self-compare */
-      if (newVal === value || (newVal !== newVal && value !== value)) {
+      // We allow same values for getters
+      // See this: https://github.com/vuejs/vue/pull/7828#issuecomment-446820288
+      if ((newVal === value && !getter) || (newVal !== newVal && value !== value)) {
         return
       }
       /* eslint-enable no-self-compare */
